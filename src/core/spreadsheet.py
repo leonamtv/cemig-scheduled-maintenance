@@ -1,1 +1,1 @@
-DEFAULT_SHEET_NAME = 'Planilha1'
+default_sheet_name = 'Planilha1'

@@ -1,10 +1,13 @@
 import pandas as pd
+
+from core.dataframe_utils import address_column, start_time_column, end_time_column, query_for_city
 from core.download_file import download_and_save
 from core.download_page import get_content
 from core.file_path import get_most_recent_downloaded_file
+from core.log_utils import log_parsed_result_string, build_address_list, print_divisor_line
 from core.parser import find_url_from_html
-from core.spreadsheet import DEFAULT_SHEET_NAME
-from core.url import CEMIG_DESLIGAMENTO_PROGRAMADO_URL
+from core.spreadsheet import default_sheet_name
+from core.url import cemig_desligamento_programado_url
 
 pd.options.display.max_columns = 10
 
@@ -12,24 +15,21 @@ download_new_file = False
 city = 'TIMOTEO'
 
 if download_new_file:
-    html_content = get_content(CEMIG_DESLIGAMENTO_PROGRAMADO_URL)
+    html_content = get_content(cemig_desligamento_programado_url)
     parsed_result = find_url_from_html(html_content)
     download_and_save(parsed_result)
 
 most_recent_spreadsheet_path = get_most_recent_downloaded_file()
-scheduled_maintenance_df = pd.read_excel(most_recent_spreadsheet_path, sheet_name=DEFAULT_SHEET_NAME, skiprows=1,
-                                             header=1)
-filtered_scheduled_maintenance_df = scheduled_maintenance_df.query('CIDADE == @city')
+scheduled_maintenance_df = pd.read_excel(most_recent_spreadsheet_path,
+                                         sheet_name=default_sheet_name,
+                                         skiprows=1,
+                                         header=1)
+filtered_scheduled_maintenance_df = scheduled_maintenance_df.query(query_for_city)
 
-# print(scheduled_maintenance_df.columns.values)
-# print(scheduled_maintenance_df.head(10))
-# print(scheduled_maintenance_df.tail(10))
-# print(scheduled_maintenance_df.query('CIDADE == @city').head(10))
-
-address_list = filtered_scheduled_maintenance_df['ENDEREÇOS'].to_list()
-start_time_list = filtered_scheduled_maintenance_df['INÍCIO'].to_list()
-end_time_list = filtered_scheduled_maintenance_df['FIM'].to_list()
+address_list = filtered_scheduled_maintenance_df[address_column].to_list()
+start_time_list = filtered_scheduled_maintenance_df[start_time_column].to_list()
+end_time_list = filtered_scheduled_maintenance_df[end_time_column].to_list()
 
 for address, start_time, end_time in zip(address_list, start_time_list, end_time_list):
-    escaped_address = fr"""[ {address.replace('\n', ' | ')} ]"""
-    print(fr"""at {escaped_address} starting at {start_time} and ending at {end_time}""")
+    print(log_parsed_result_string.format(build_address_list(address), start_time, end_time))
+    print_divisor_line()

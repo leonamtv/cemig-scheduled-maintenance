@@ -1,1 +1,1 @@
-CEMIG_DESLIGAMENTO_PROGRAMADO_URL = r"https://www.cemig.com.br/atendimento/aviso-de-desligamento-programado/"
+cemig_desligamento_programado_url = r"https://www.cemig.com.br/atendimento/aviso-de-desligamento-programado/"
