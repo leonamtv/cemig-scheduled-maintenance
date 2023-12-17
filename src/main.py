@@ -11,7 +11,7 @@ from core.url import cemig_desligamento_programado_url
 
 pd.options.display.max_columns = 10
 
-download_new_file = False
+download_new_file = True
 city = 'TIMOTEO'
 
 if download_new_file:

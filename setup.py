@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='cemig-scheduled-maintainance',
+    name='cemig-scheduled-maintenance',
     version='1.0',
     packages=['test', 'core'],
     package_dir={'': 'src'},
