@@ -1,5 +1,5 @@
 from urllib.request import urlopen, Request
-from .header import get_headers
+from .header_utils import get_headers
 
 
 def get_content(url: str):

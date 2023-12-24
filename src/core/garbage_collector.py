@@ -2,13 +2,13 @@ import os
 import glob
 
 from core.config import number_of_files_to_maintain
-from core.file_path import XLSX_DUMP_PATH
+from core.file_path import xlsx_dump_path
 from core.log_utils import log, print_divisor_line
 
 
 def get_files_for_deletion():
-    if os.path.isdir(XLSX_DUMP_PATH):
-        list_of_files = glob.glob(XLSX_DUMP_PATH + '*')
+    if os.path.isdir(xlsx_dump_path):
+        list_of_files = glob.glob(xlsx_dump_path + '*')
         sorted_list_of_files = sorted(list_of_files, key=os.path.getctime)
         number_of_files = len(sorted_list_of_files)
         if number_of_files > number_of_files_to_maintain:
