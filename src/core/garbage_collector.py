@@ -1,7 +1,7 @@
 import os
 import glob
 
-from core.config import number_of_files_to_maintain
+from core.config import number_of_files_to_maintain, headless_automation
 from core.file_path import xlsx_dump_path
 from core.log_utils import log, print_divisor_line
 
@@ -19,12 +19,14 @@ def get_files_for_deletion():
 def delete_older_files():
     files_eligible_for_deletion = get_files_for_deletion()
     if len(files_eligible_for_deletion) == 0:
-        log('There are no older files to delete')
+        if not headless_automation:
+            log('There are no older files to delete')
     else:
-        print_divisor_line()
         for index, file in enumerate(files_eligible_for_deletion):
             if not os.path.isfile(file):
-                log(f"Skipping {file} | Reason: File does not exist", with_divisor=True)
+                if not headless_automation:
+                    log(f"Skipping {file} | Reason: File does not exist", with_divisor=True)
             else:
-                log(f"Deleting {file}", with_divisor=True)
+                if not headless_automation:
+                    log(f"Deleting {file}", with_divisor=True)
                 os.remove(file)

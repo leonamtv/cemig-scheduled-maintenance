@@ -2,3 +2,4 @@ bs4~=0.0.1
 beautifulsoup4~=4.11.1
 pandas~=1.4.2
 setuptools~=62.1.0
+telepot~=12.7

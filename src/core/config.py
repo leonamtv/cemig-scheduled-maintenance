@@ -43,10 +43,18 @@ city_column = 'CIDADE'
 start_time_column = 'INÍCIO'
 end_time_column = 'FIM'
 
-query_for_city = fr"""{city_column} == @city"""
+query_for_city = fr"""{city_column} == """
 
 # ----------------------------------------------------------------------------------------------------------------
 # log session
 # ----------------------------------------------------------------------------------------------------------------
 logging = True
-log_parsed_result_string = 'at: {}\n\nstarting at: {} and\nending at: {}'
+headless_automation = True
+log_parsed_result_string = 'local: {}\n\ncomeçando em: {} e\nterminando em: {}'
+error_message_when_logging_results = "Error in logging the parsed result"
+no_scheduled_maintenance_found = "Nenhuma manutenção programada encontrada para a cidade nos dados atuais."
+
+# ----------------------------------------------------------------------------------------------------------------
+# argument parser
+# ----------------------------------------------------------------------------------------------------------------
+argument_parser_description = 'Script para verificar manutenções programadas.'

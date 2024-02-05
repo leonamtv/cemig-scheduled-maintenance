@@ -1,12 +1,11 @@
 import pandas as pd
 
-from core.config import address_column
+from core.config import address_column, no_scheduled_maintenance_found, error_message_when_logging_results
 from core.config import start_time_column
 from core.config import end_time_column
 from core.config import query_for_city
 from core.file_path import get_most_recent_downloaded_file
 from core.log_utils import log_parsed_result
-from core.log_utils import print_divisor_line
 from core.log_utils import log
 from core.config import default_sheet_name
 from core.download_file import download_and_save
@@ -39,15 +38,17 @@ def default_flow(city):
                                              sheet_name=default_sheet_name,
                                              skiprows=1,
                                              header=1)
-    filtered_scheduled_maintenance_df = scheduled_maintenance_df.query(query_for_city)
+    filtered_scheduled_maintenance_df = scheduled_maintenance_df.query(query_for_city + f"'{city.upper()}'")
 
-    address_list = filtered_scheduled_maintenance_df[address_column].to_list()
-    start_time_list = filtered_scheduled_maintenance_df[start_time_column].to_list()
-    end_time_list = filtered_scheduled_maintenance_df[end_time_column].to_list()
+    if not filtered_scheduled_maintenance_df.empty:
+        address_list = filtered_scheduled_maintenance_df[address_column].to_list()
+        start_time_list = filtered_scheduled_maintenance_df[start_time_column].to_list()
+        end_time_list = filtered_scheduled_maintenance_df[end_time_column].to_list()
 
-    if len(address_list) == len(start_time_list) == len(end_time_list) > 0:
-        print_divisor_line()
-        for address, start_time, end_time in zip(address_list, start_time_list, end_time_list):
-            log_parsed_result(address, start_time, end_time)
+        if len(address_list) == len(start_time_list) == len(end_time_list) > 0:
+            for address, start_time, end_time in zip(address_list, start_time_list, end_time_list):
+                log_parsed_result(address, start_time, end_time)
+        else:
+            log(error_message_when_logging_results)
     else:
-        log("Error in logging the parsed result")
+        log(no_scheduled_maintenance_found)
